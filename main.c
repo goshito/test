@@ -1,61 +1,51 @@
 #include <stdio.h>
-#include <ctype.h>
 #include <string.h>
 
-char mystring[] = "What the fuck is this shit 0x00???";
+#define NUMBER_OF_CDS 4
 
-void chartypes() {
-    int i;
-    char c;
-    int numDigits = 0;
-    int numLetters = 0;
-    int numUpCase = 0;
-    int numLowCase = 0;
-    int numSpaces = 0;
-    int numPunct = 0;
-    int numCtl = 0;
-    int numUnknown = 0;
-    int lenghtOfStr = strlen(mystring);
+struct cd {
+    char name[50];
+    char artist[50];
+    int trackcount;
+    int rating;
+};
+
+struct cd cd_collection[NUMBER_OF_CDS];
+
+void create_cdcollection() {
+    strcpy(cd_collection[0].name, "Ebasi hitovete");
+    strcpy(cd_collection[0].artist, "Briana Boobs");
+    cd_collection[0].trackcount = 20;
+    cd_collection[0].rating = 10;     
     
-    for (i = 0; i < lenghtOfStr; i++) {
-        c = mystring[i];
-        if (isalpha(c)) {
-            numLetters++;
-            if (isupper(c)) {
-                printf("'%c' [uppercase character]\n", c);
-                numUpCase++;
-            } else {
-                printf("%c [lowecase character]\n", c);
-                numLowCase++;
-            }
-        } else if (isdigit(c)) {
-            printf("'%c' [digit]\n", c);
-            numDigits++;
-        } else if (ispunct(c)) {
-            printf("'%c' [puntuation]\n", c);
-            numPunct++;
-        } else if (isblank(c)) {
-            printf("'%c' [blank]\n", c);
-            numSpaces++;
-        } else if (iscntrl(c)) {
-            printf("'%c' [ctrl]\n", c);
-            numCtl++;
-        } else {
-        printf("'%c' [unknown]\n", c);
-        numUnknown++;
-       }
-    }
-    printf("The string contains %d characters: %d letters (%d uppercase, %d lowercase)\n", lenghtOfStr, numLetters, numUpCase, numLowCase);
-    printf( "%d digits, %d ctrl, %d punctuation characters, %d spaces and %d unclassified characters.\n", numDigits, numCtl, numPunct, numSpaces, numUnknown);
+    strcpy(cd_collection[1].name, "Bash hitovete");
+    strcpy(cd_collection[1].artist, "Gode&Bilche Beats");
+    cd_collection[1].trackcount = 3;
+    cd_collection[1].rating = 20;
+    
+    strcpy(cd_collection[2].name, "Retro chalga");
+    strcpy(cd_collection[2].artist, "Marko i Snejina");
+    cd_collection[2].trackcount = 8;
+    cd_collection[2].rating = 6;
+    
+    strcpy(cd_collection[3].name, "Drisko Beats");
+    strcpy(cd_collection[3].artist, "Drisko");
+    cd_collection[3].trackcount = 9;
+    cd_collection[3].rating = 2;
 }
 
 
-int main() {
-    if (isalpha('x')) {
-        printf("'x' is a letter");
-    } else {
-        printf("'x' is not a letter\n");
+void display_cdcollection() {
+    int i;
+    //struct cd thiscd;
+    for (i = 0; i < NUMBER_OF_CDS; i++) {
+        thiscd = cd_collection[i];
+        printf("CD #%d: '%s' by %s has %d tracks. My rating = %d\n", i, thiscd.name, thiscd.artist, thiscd.trackcount, thiscd.rating);
     }
-    chartypes();
+}
+
+int main() {
+    create_cdcollection();
+    display_cdcollection();
     return 0;
 }
