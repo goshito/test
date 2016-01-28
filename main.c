@@ -3,7 +3,7 @@
 
 #define NUMBER_OF_CDS 4
 
-typedef char Str50[50];  
+typedef char Str50[50]; 
 
 typedef struct cd {
     Str50 name;
