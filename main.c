@@ -3,14 +3,17 @@
 
 #define NUMBER_OF_CDS 4
 
-struct cd {
-    char name[50];
-    char artist[50];
+typedef char Str50[50];  
+
+typedef struct cd {
+    Str50 name;
+    Str50 artist;
     int trackcount;
     int rating;
-};
+} CD;
 
-struct cd cd_collection[NUMBER_OF_CDS];
+//struct cd cd_collection[NUMBER_OF_CDS];
+CD cd_collection[NUMBER_OF_CDS];
 
 void create_cdcollection() {
     strcpy(cd_collection[0].name, "Ebasi hitovete");
@@ -38,6 +41,7 @@ void create_cdcollection() {
 void display_cdcollection() {
     int i;
     //struct cd thiscd;
+    CD thiscd;
     for (i = 0; i < NUMBER_OF_CDS; i++) {
         thiscd = cd_collection[i];
         printf("CD #%d: '%s' by %s has %d tracks. My rating = %d\n", i, thiscd.name, thiscd.artist, thiscd.trackcount, thiscd.rating);
