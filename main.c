@@ -1,40 +1,57 @@
 #include <stdio.h>
+#include <string.h>
 
-#define MAXSTRLEN 30
 #define FILENAME "cveta.txt"
-#define EMPTYFILENAME "nema.txt"
-#define INVALIDFILENAME "sex.txt"
+#define MAXSTRLEN 200
 
-void linecount(char *fn) {
-    int numlines = 0;
+// returns index (0-based) of first char of searchstring in sourcestring
+// or -1 if searchstring is not found   
+
+static int searchstring(char searchstr[], char sourcestr[]) {
+    char *ptrtostr;
+    int foundat;
+    foundat = -1;
+    ptrtostr = strstr(sourcestr, searchstr);
+    if (ptrtostr != 0) {
+        foundat = (int)((ptrtostr - sourcestr));
+    }
+    return foundat;
+}
+
+void findstrings(char *fileName, char *ss) {
+    FILE *f;
+    int count;
     char line[MAXSTRLEN];
-    FILE *fp = fopen(fn, "r");
-    if (fp != 0) {
-        while (fgets(line, sizeof(line), fp) != 0) {
-            numlines++;
-        }
-        fclose(fp);
-        printf("%s contains %d lines of text.\n", fn, numlines);
+    
+    f = fopen(fileName, "r");
+    if (f == 0) {
+        printf("Can't open file: '%s'.\n", FILENAME);
     } else {
-        printf("file %s cannot be opened", fn);
+        count = 0;
+        while (fgets(line, MAXSTRLEN, f) != 0) {
+            if (searchstring(ss, line) >= 0) {
+                count++;
+            }
+        }
+        printf("'%s' was found in %d lines\n", ss, count);
+        fclose(f);
     }
 }
 
 int main() {
     FILE *fp;
-    fp = fopen("cveta.txt", "w");
-    fputs("I want put my tongue into Cveta's mouth...\n", fp);
-    fputs("...because she is asking for it.", fp);
+    fp = fopen(FILENAME, "a");
+    fputs("\ntongue", fp);
     fclose(fp);
     
-    fp = fopen("cveta.txt", "a");
-    fputs("I also want to fuck her", fp);
-    fclose(fp);
+    findstrings(FILENAME, "tongue");
     
-    fp = fopen("nema.txt", "w");
-    fclose(fp);
-    linecount(FILENAME);
-    linecount(EMPTYFILENAME);
-    linecount(INVALIDFILENAME);
+    /*
+    FILE *fp;
+    char *string;
+    fp = fopen("cveta.txt", "r");
+    fgets(string, MAXSTRLEN, fp);
+    printf("%d", searchstring(string, "tongue"));
+    */
     return 0;
 }
