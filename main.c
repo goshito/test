@@ -1,35 +1,61 @@
 #include <stdio.h>
-#include <stdlib.h>
+#include "mystring.h"
+#include "cddb.h"
 
-void readin(char *filename) {
-    FILE *f;
-    long size;
-    char *b;
-    size_t items_read;
-    int linecount;
-    int i;
-    linecount = 0;
-    f = fopen(filename, "rb");
-    if (f == 0) {
-        printf("Cannot open'%s'\n", filename);
+#define filename "cd_database.bin"
+#define backupfilename "cd_database.bak"
+
+char getcommand() {
+    char command[MAXSTRLEN];
+    int commandlen;
+    char c;
+    
+    commandlen = readln(command);
+    if (commandlen != 1) {
+        c = 'x';
     } else {
-        fseek(f, 0, SEEK_END);
-        size = ftell(f);
-        rewind(f);
-        b = (char*)malloc(size);    
-        items_read = fread(b, 1, size, f);
-        fclose(f);
-        for (i = 0; i < size; i++) {
-            if (b[i] == '\n') {
-                linecount++;
-            }
-        }
-        printf("number of lines was %d with %d chars (%d items read).\n", linecount, i, items_read);
-        free(b);
+        c = command[0];
     }
+    return c;
 }
 
 int main() {
-    readin("cveta.txt");
+    int keepgoing = 1;
+    
+    create_cdcollection();
+    while (keepgoing) {
+        printf("\nEnter a command or 'q' to quit.");
+        printf("\nCommands: 'a' = add record, 'd' = display records, 'm' = modify record");
+        printf("\n          'n' = number of records, 's' = save backup, (from memory)\n>");
+        switch (getcommand()) {
+            case 'a':
+                printf("Add record\n");
+                add_cd(filename);
+                break;
+            case 'd':
+                printf("Display records\n");
+                display_cdcollection(filename);
+                break;
+            case 'm':
+                printf("Modify records\n");
+                modify_cd(filename);
+                break;
+            case 'n':
+                printf("Number of records\n");
+                printf("Database contains %d records\n", number_of_records_in_db(filename));
+                break;
+            case 's':
+                printf("Save backup\n");
+                save_cdcollection(backupfilename);
+                break;
+            case 'q':
+                printf("Ending...\n");
+                keepgoing = 0;
+                break;
+            default:
+                printf("Invalid command\n");
+                break;
+        }
+    }
     return 0;
 }
